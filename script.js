@@ -16,7 +16,8 @@ function getHumanChoice(){
     return humanChoice;
 }
 
-function playRound(humanChoice, computerChoice){
+function playRound(humanChoice){
+    let computerChoice = getComputerChoice();
     humanChoice = humanChoice.toLowerCase();
     if (humanChoice == "rock"){
         if (computerChoice == "rock"){
@@ -41,88 +42,62 @@ function playRound(humanChoice, computerChoice){
     return "It's a draw!";
 }
 
-function playGame(){
-    let humanScore = 0;
-    let computerScore = 0;
-    const win = /You win/;
-    const lose = /You lose/;
-
-    let computerChoice = getComputerChoice();
-    let humanChoice = getHumanChoice();
-    let result=playRound(humanChoice, computerChoice);
-    console.log("You played "+humanChoice+".");
-    console.log("Computer played "+computerChoice+".");
-    console.log(result);
-    if (result.match(win)){
+function displayResult(elem, text){
+    console.log(text);
+    if (text.match(/You win/)){
         humanScore++;
-    } else if (result.match(lose)){
+        elem.textContent = "You "+humanScore+" : "+computerScore+ " Computer";
+    } else if (text.match(/You lose/)){
         computerScore++;
+        elem.textContent = "You "+humanScore+" : "+computerScore+ " Computer";
+    } else if (text.match(/draw/)){
+        
+        elem.textContent = "You "+humanScore+" : "+computerScore+ " Computer";
+    } else {
+        elem.textContent = text;
+        humanScore = 0;
+        computerScore = 0;
     }
-
-    computerChoice = getComputerChoice();
-    humanChoice = getHumanChoice();
-    result=playRound(humanChoice, computerChoice);
-    console.log("You played "+humanChoice+".");
-    console.log("Computer played "+computerChoice+".");
-    console.log(result);
-    if (result.match(win)){
-        humanScore++;
-    } else if (result.match(lose)){
-        computerScore++;
-    }
-
-    computerChoice = getComputerChoice();
-    humanChoice = getHumanChoice();
-    result=playRound(humanChoice, computerChoice);
-    console.log("You played "+humanChoice+".");
-    console.log("Computer played "+computerChoice+".");
-    console.log(result);
-    if (result.match(win)){
-        humanScore++;
-    } else if (result.match(lose)){
-        computerScore++;
-    }
-
-    computerChoice = getComputerChoice();
-    humanChoice = getHumanChoice();
-    result=playRound(humanChoice, computerChoice);
-    console.log("You played "+humanChoice+".");
-    console.log("Computer played "+computerChoice+".");
-    console.log(result);
-    if (result.match(win)){
-        humanScore++;
-    } else if (result.match(lose)){
-        computerScore++;
-    }
-
-    computerChoice = getComputerChoice();
-    humanChoice = getHumanChoice();
-    result=playRound(humanChoice, computerChoice);
-    console.log("You played "+humanChoice+".");
-    console.log("Computer played "+computerChoice+".");
-    console.log(result);
-    if (result.match(win)){
-        humanScore++;
-    } else if (result.match(lose)){
-        computerScore++;
-    }
-    if (humanScore>computerScore){
-        return "YOU WIN!";
-    } else if (humanScore<computerScore){
-        return "YOU LOSE!";
-    }
-    return "DRAW";
-
+    
+    
 }
 
-// let computerChoice = getComputerChoice();
-// console.log(computerChoice)
+const body = document.querySelector("body");
+let humanScore = 0;
+let computerScore = 0;
 
-// let humanChoice = getHumanChoice();
-// console.log(humanChoice);
+const btnRock = document.createElement("button");
+btnRock.textContent = "Rock";
+btnRock.id = "rock";
+body.appendChild(btnRock);
 
-// let result = playRound(humanChoice, computerChoice);
-// console.log(result)
+const btnPaper = document.createElement("button");
+btnPaper.textContent = "Paper";
+btnPaper.id = "paper"
+body.appendChild(btnPaper);
 
-console.log(playGame());
+
+const btnScissors = document.createElement("button");
+btnScissors.textContent = "Scissors";
+btnScissors.id = "scissors";
+body.appendChild(btnScissors);
+
+const div = document.createElement("div");
+body.appendChild(div);
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => {
+    button.addEventListener("click", (e)=>{
+        displayResult(div, playRound(e.target.id));
+        if (humanScore==5){
+            displayResult(div, "CONGRATS!!! YOU WON.");
+        } 
+        if (computerScore==5){
+            displayResult(div, "YOU LOST!")
+        }
+        
+    })
+})
+
+
 
